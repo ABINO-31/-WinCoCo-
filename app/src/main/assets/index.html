@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#808080">
+<title>WinCoCo</title>
+<style>
+html,body{margin:0;height:100%;background:#202428;overflow:hidden;font:11px Tahoma,"Microsoft Sans Serif","MS Sans Serif",Arial,sans-serif;color:#000;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+#stage{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+#app{position:relative;width:432px;height:292px;background:#808080;flex:none;transform-origin:center}
+#p1{position:absolute;left:5px;top:5px;width:422px;height:259px;background:#d4d0c8;overflow:hidden}
+#sb{position:absolute;left:5px;top:264px;width:422px;height:23px;background:#d4d0c8;color:#008000;font-size:10px;box-sizing:border-box}
+#sb i{position:absolute;top:2px;height:17px;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;font-style:normal;line-height:17px;box-sizing:border-box}
+.a{position:absolute;box-sizing:border-box}
+.st{position:absolute;box-sizing:border-box;overflow:hidden;white-space:nowrap;line-height:15px}
+.bx{box-shadow:inset 1px 1px #808080,inset -1px -1px #fff;text-align:center;padding-top:2px}
+.ye{background:#ff0;color:#f00}.aq{background:#0ff;color:#00f}
+.ed{position:absolute;box-sizing:border-box;height:21px;background:#fff;border:0;padding:2px 3px;font:inherit;color:#000;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff,inset 2px 2px #404040,inset -2px -2px #d4d0c8;border-radius:0;outline:0;-webkit-user-select:text;user-select:text}
+.ed[readonly]{cursor:default}
+.bt{position:absolute;box-sizing:border-box;background:#d4d0c8;border:0;padding:0;font:inherit;color:#000;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:inset -1px -1px #404040,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #d4d0c8;cursor:pointer;border-radius:0}
+.bt:active,.bt.on{box-shadow:inset 1px 1px #404040,inset -1px -1px #fff,inset 2px 2px #808080;padding:1px 0 0 1px}
+.bt img{image-rendering:pixelated}
+.sp{box-shadow:none}.sp:active{box-shadow:inset 1px 1px #808080,inset -1px -1px #fff}
+.gb{position:absolute;box-sizing:border-box;border:1px solid #808080;box-shadow:1px 1px #fff,inset 1px 1px #fff}
+.gb>b{position:absolute;left:8px;top:-7px;background:#d4d0c8;font-weight:400;white-space:pre;line-height:13px}
+.gb>div{position:absolute;inset:8px 4px 2px;display:grid;align-items:center}
+.r{display:flex;align-items:center;gap:5px;white-space:nowrap;cursor:pointer;line-height:13px}
+.r:before{content:"";width:12px;height:12px;border-radius:50%;background:#fff;flex:none;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff,inset 2px 2px #404040,inset -2px -2px #d4d0c8;box-sizing:border-box}
+.r.s:after{content:"";position:absolute;width:4px;height:4px;border-radius:50%;background:#000;margin-left:4px}
+.r.d{color:#808080;text-shadow:1px 1px #fff;pointer-events:none}
+.r.d:before{background:#d4d0c8}
+.cb:before{border-radius:0}.cb.s:after{content:"✔";background:none;width:auto;height:auto;margin:-1px 0 0 2px;font-size:10px;line-height:12px;position:absolute;color:#000}
+.cb{flex-direction:row-reverse;justify-content:flex-end}
+.sn{position:absolute;box-sizing:border-box;width:16px;height:10px;font-size:7px;text-align:center;line-height:9px}
+#pg,#pm{display:none}
+#pm{position:absolute;left:68px;top:0;width:193px;height:257px;background:#d4d0c8;box-shadow:inset -1px -1px #404040,inset 1px 1px #fff,inset -2px -2px #808080;z-index:5}
+#pm textarea{position:absolute;left:4px;top:5px;width:185px;height:224px;box-sizing:border-box;resize:none;font:11px "Courier New",monospace;background:#fff;border:0;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff,inset 2px 2px #404040;white-space:pre;overflow:auto;-webkit-user-select:text;user-select:text}
+#ov{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);z-index:99}
+#dl{background:#d4d0c8;width:min(300px,88vw);box-shadow:inset -1px -1px #404040,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #d4d0c8,0 4px 20px #0008;padding:3px}
+#dl h6{margin:0;background:#000080;color:#fff;font:700 12px Tahoma,Arial;padding:3px 4px}
+#dl p{margin:16px 12px;white-space:pre-wrap;font-size:13px;text-align:center}
+#dl div{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
+#dl button{position:static;width:80px;height:26px;font-size:13px}
+#off{display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:#202428}
+#mini{display:none;position:fixed;left:50%;transform:translateX(-50%);top:calc(10px + env(safe-area-inset-top));width:200px;height:26px;background:#808080;color:#fff;border:0;font:12px Tahoma;cursor:pointer;z-index:9}
+</style></head><body>
+<div id="stage"><div id="app">
+<div id="p1">
+<button class="bt" id="bMemo" style="left:152px;top:219px;width:35px;height:31px" title="Mémo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAQ0lEQVR42mNgoBAwIrH/k6AWuwH//2M3g5GREachTMQ6FWr4f7INQHIFiiEsJNiObhBpLsAFRg0YDAaQkhcI5ouBAQAA0g4YfmZ9egAAAABJRU5ErkJggg=="></button>
+<div class="st bx ye" style="left:195px;top:10px;width:212px;height:95px" id="s1">Coordonnées à convertir</div>
+<div class="st bx aq" style="left:195px;top:111px;width:212px;height:98px" id="s2">Coordonnées Converties</div>
+<input class="ed" id="ex" style="left:272px;top:42px;width:121px" value="472960.688" inputmode="decimal">
+<input class="ed" id="ey" style="left:272px;top:67px;width:121px" value="3983701.878" inputmode="decimal">
+<div class="gb" id="rgc" style="left:12px;top:3px;width:176px;height:138px"><b id="gC">  Conversion  </b><div style="grid-template-rows:repeat(6,1fr)"></div></div>
+<div class="st" id="s3" style="left:-3px;top:148px;width:20px">El.</div>
+<button class="bt" id="bGo" style="left:194px;top:219px;width:83px;height:31px"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAeklEQVR42t2UUQrAIAxDk+HFejNv5tG6HweONdKNfi3gj5Jn0CgQaACOUEPMA4eCPGEXRMMSkBcwbZYOz0B8M0JYC7Zy9zgcSU4YU2kUqfcuUx0o0o9BzQAOwG25CZKcB5vokrG0R7XNrnhr3CWz2/pqNuZCf/iPynQCcqtTkHIo/fMAAAAASUVORK5CYII="><span id="tGo">Convertir</span></button>
+<select class="a" id="rge" style="left:12px;top:145px;width:175px;height:21px;font:inherit;background:#fff;border:1px solid #808080;border-radius:0"></select>
+<div class="gb" id="rgu" style="left:12px;top:167px;width:178px;height:40px"><b id="gU">  Fuseau UTM  </b><div style="grid-template-columns:repeat(4,1fr)"></div></div>
+<div class="gb" id="rgl" style="left:13px;top:210px;width:137px;height:40px"><b id="gL">  Zone Lambert  </b><div style="grid-template-columns:repeat(2,1fr)"></div></div>
+<button class="bt" id="bQ" style="left:366px;top:219px;width:41px;height:31px" title="Quitter"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAAcUlEQVR42s2T2wrAIAxDE/HD++fZ40ZXNbIxFhBsqYfeBP4iJlub8QCAXjmlO4vkkNyyI2L+IEWrhPig0DATDxS63tv+LELLnhgQvgDJoOC0Jy7oAeQE9dW2pgmp2uCWHCwy4OQMy6FXiicZH9IGfaMDUK0aMA0QRAoAAAAASUVORK5CYII="></button>
+<button class="bt" id="bMv" style="left:278px;top:219px;width:29px;height:31px" title="Déplacer"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAh0lEQVR42s2TQQ6AIAwEd43///J4IGixiBgvNGkaSJluC0irmCdyGJxlBgIQ8q/ocHIbAyQ7AyQEGcLdAdmF9ARKSoBSWlJVcMUMst3tnX5Usw5+dpBmUitXdaWldj9ciCVpT5PsTPcGSHW3mcc0ACgpqbMq8nuwCUhMeim+qBK/fLI/H/ebHTfhceZBLx3tAAAAAElFTkSuQmCC"></button>
+<input class="ed" id="e1" readonly style="left:274px;top:132px;width:121px">
+<input class="ed" id="e2" readonly style="left:273px;top:158px;width:121px">
+<div class="st ye" id="lx" style="left:203px;top:45px;width:65px;text-align:right">X</div>
+<div class="st ye" id="ly" style="left:203px;top:72px;width:65px;text-align:right">Y</div>
+<div class="st aq" id="lxx" style="left:205px;top:135px;width:65px;text-align:right">Latitude</div>
+<div class="st aq" id="lyy" style="left:205px;top:160px;width:65px;text-align:right">Longitude</div>
+<div class="a ye" id="pg" style="left:208px;top:25px;width:192px;height:77px">
+<div class="st ye" id="pL1" style="left:-1px;top:13px;width:64px;text-align:right">Latitude</div>
+<div class="st ye" id="pL2" style="left:-2px;top:38px;width:65px;text-align:right">Longitude</div>
+<input class="ed" id="dx" style="left:67px;top:10px;width:27px" value="36" maxlength="2" inputmode="numeric" title="Latitude, degrés">
+<input class="ed" id="dy" style="left:68px;top:35px;width:27px" value="2" maxlength="2" inputmode="numeric" title="Longitude, degrés">
+<input class="ed" id="mx" style="left:102px;top:10px;width:27px" value="0" maxlength="2" inputmode="numeric" title="Latitude, minutes">
+<input class="ed" id="sx" style="left:134px;top:10px;width:50px" value="0.000" inputmode="decimal" title="Latitude, secondes">
+<input class="ed" id="my" style="left:103px;top:35px;width:27px" value="42" maxlength="2" inputmode="numeric" title="Longitude, minutes">
+<input class="ed" id="sy" style="left:135px;top:35px;width:49px" value="0.000" inputmode="decimal" title="Longitude, secondes">
+<div class="r s" id="cE" style="left:64px;top:58px;position:absolute">Est</div>
+<div class="r" id="cO" style="left:106px;top:59px;position:absolute">Ouest</div></div>
+<div class="r cb s" id="cM" style="left:249px;top:183px;position:absolute;color:#000080;background:#0ff;width:56px;height:17px;padding-left:2px">Milliers</div>
+<div class="a" style="left:359px;top:182px;width:35px;height:22px"><input class="ed" id="pr" readonly value="2" style="left:0;top:0;width:19px;height:22px;padding:2px 1px;text-align:right"><button class="bt sn" id="pu" style="left:19px;top:0">▲</button><button class="bt sn" id="pd" style="left:19px;top:11px">▼</button></div>
+<div class="st aq" id="tP" style="left:305px;top:184px;width:52px;height:20px;text-align:right;color:#000080">Précision</div>
+<button class="bt" id="bCp" style="left:202px;top:180px;width:26px;height:25px" title="Copier résultats dans presse papier"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAfUlEQVR42s2SSw6AMAhEZxrvLZ4cF7a2xYIkbpyEpN8HQwA+igA0uMsBVGcGyTSkeBcVqukKWta+FueLcJHsKUCWZ1csLJCcwre2Y4SU0fMYFtz3R7Oik4XasCFEIzVAugLPXnl7ZMF2ZrZgWNQMlZ2RGxDKZrQKAb3jf9YJB3GWzqVYt6kAAAAASUVORK5CYII="></button>
+<div id="pm">
+<textarea id="mt" wrap="off"></textarea>
+<button class="bt sp" data-x="xl" style="left:8px;top:232px;width:23px;height:22px" title="Exporter vers Excel (.csv)"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmElEQVR42r1TbQ6FMAgrxoPNm+HJ5GZ9PxZxEnAmJo+EjH20g7IBH00AsFiPlp5br+1hX4SBhGbmk9aax4uDZTjfyViBVTVJj6SPp3ewOwCqKotynklm4ClJBZaCpGtyFza9cYlgM4PueyUszAyjqBHsrqplOVlJnHqhyZkjs94C6D2P5STK8NXDP44r3rYHaasWv/szf7YfetSsIyaPLI4AAAAASUVORK5CYII="></button>
+<button class="bt sp" data-x="wd" style="left:32px;top:232px;width:23px;height:22px" title="Exporter vers Word (.doc)"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAP0lEQVR42mNgGFbgPxSTpIaJUluZiLCRaAMY0TThohnp4oX/OFxF0ABGAhYykhKIjEQaShlgxBFljETwhwsAAKW+DgyBPeF1AAAAAElFTkSuQmCC"></button>
+<button class="bt sp" data-x="tx" style="left:56px;top:232px;width:23px;height:22px" title="Enregistrer dans fichier texte"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAfUlEQVR42s2SSw6AMAhEZxrvLZ4cF7a2xYIkbpyEpN8HQwA+igA0uMsBVGcGyTSkeBcVqukKWta+FueLcJHsKUCWZ1csLJCcwre2Y4SU0fMYFtz3R7Oik4XasCFEIzVAugLPXnl7ZMF2ZrZgWNQMlZ2RGxDKZrQKAb3jf9YJB3GWzqVYt6kAAAAASUVORK5CYII="></button>
+<button class="bt sp" data-x="cp" style="left:80px;top:232px;width:23px;height:22px" title="Copier dans presse papiers"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAfElEQVR42s1T0Q6AIAi8a35Yfrn8GT2kyyTDam2ysanAeZwIzGKs1vqyDqHeqPo4JM1ZGEnyLgmjib1WjCYFoGWjqiClKY3sMhljE/lYEw90uSpo/YitECGApLcgJI0XAAAQkdxO0o4Uvp2Hcgcyr+PNSY7z65z883fmsQ03A2XutBg34wAAAABJRU5ErkJggg=="></button>
+<button class="bt sp" data-x="er" style="left:103px;top:232px;width:23px;height:22px" title="Effacer"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAbklEQVR42t2SUQrEIBBDnz15jhZPlv7URWmr7X4tG5CBgRd1JvDzkhRgOJJy9JeK7SQZqu1m9h5Oku5V7+H2hZnBEp7N4BF8d/tX8NatCoBa61BLKUhqKwUoVwbYXuXhBH8MHoTpEp6mrU8d/60dejDOFJSwry0AAAAASUVORK5CYII="></button>
+<button class="bt sp" id="bSep" style="left:126px;top:232px;width:23px;height:22px" title="Séparateur, cliquez pour modifier">;</button>
+<button class="bt sp" data-x="cl" style="left:149px;top:232px;width:36px;height:22px" title="Fermer memo"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAcklEQVR42t2T4QqAMAiE72IPvje/ftRAW8smBZF/RKaf3sGArwUnepWcG0JsrSfUyIJK8nSNPJLU3gly3tfilxCAINHVLfNiw+IXKcjxmdq08a68jlPOLiKBWuPpvYcHaXlI51EW4jwyDdOQDvTC//xDrD8jKB5gyVvwAAAAAElFTkSuQmCC"></button></div>
+<button class="bt" id="bAb" style="left:337px;top:219px;width:28px;height:31px" title="A propos"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAb0lEQVR42t2TQQ7AIAgEF9OHrz/jZ9uLNj1VojQ23YSDlwk4APwpavWYEoVJgiSMoOXzI6fDSub/RYBqoP5YkiJ3R60VZpYroofkuhSSFzDD8uvdKaU7ACIpdx9CjyAZALptm10bu69LBLblhvfnBHYwaEilfyYcAAAAAElFTkSuQmCC"></button>
+<button class="bt" id="bMin" style="left:308px;top:219px;width:28px;height:31px" title="Réduire"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAUUlEQVR42mNgIAMwYhH7T0gdC1aj9u9HsB0dMaSZyHEeWZpY8PgDlz8ZGVEkkP2CDiB+Y0R3HiM2T6NrwOYnTI1oGvD7Yf/+/0T4lahIpjMAAAJID5jOARHrAAAAAElFTkSuQmCC"></button>
+</div>
+<div id="sb"><i style="left:2px;width:110px;padding-left:3px">© Adjou M. 2004 ®</i><i style="left:112px;width:50px;text-align:center;cursor:pointer;font-weight:700" id="hint">FR</i></div>
+</div></div>
+<button id="mini">WinCoCo — restaurer</button>
+<div id="off"><button class="bt" id="bRe" style="position:static;width:160px;height:34px;font-size:14px">Relancer WinCoCo</button></div>
+<div id="ov"><div id="dl"><h6>WinCoCo</h6><p id="dm" dir="auto"></p><div id="db"></div></div></div>
+<script>
+const D=Math.PI/180,$=i=>document.getElementById(i);
+const EL=[["CLARKE 1880 Afrique Anglaise",6378249.145,1/293.465],["HAYFORD 1924",6378388,1/297],["HAYFORD 1976",6378140,1/298.257],["CLARKE 1880 France",6378249.2,1/293.4660208],["CLARKE 1866",6378206.4,1/294.9786982],["KRASSOWSKY",6378245,1/298.3],["W.G.S 1984",6378137,1/298.257223563],["G.R.S 1980",6378137,1/298.257222101]];
+const LZ=[{p:36,k:.999625544},{p:33.3,k:.999625769}],L0=2.7,FE=500135,FN=300090;
+function ell(i){const[,a,f]=EL[i];return{a,f,e:Math.sqrt(f*(2-f))}}
+function kr(el){const n=el.f/(2-el.f),n2=n*n,n3=n2*n,n4=n3*n,n5=n4*n,n6=n5*n;return{A:el.a/(1+n)*(1+n2/4+n4/64+n6/256),
+al:[n/2-2*n2/3+5*n3/16+41*n4/180-127*n5/288+7891*n6/37800,13*n2/48-3*n3/5+557*n4/1440+281*n5/630-1983433*n6/1935360,61*n3/240-103*n4/140+15061*n5/26880+167603*n6/181440,49561*n4/161280-179*n5/168+6601661*n6/7257600,34729*n5/80640-3418889*n6/1995840,212378941*n6/319334400],
+be:[n/2-2*n2/3+37*n3/96-n4/360-81*n5/512+96199*n6/604800,n2/48+n3/15-437*n4/1440+46*n5/105-1118711*n6/3870720,17*n3/480-37*n4/840-209*n5/4480+5569*n6/90720,4397*n4/161280-11*n5/504-830251*n6/7257600,4583*n5/161280-108847*n6/3991680,20648693*n6/638668800]}}
+function g2u(el,lat,lon,fu){const e=el.e,K=kr(el),p=lat*D,l=(lon-((fu-31)*6+3))*D,s=Math.sin(p),t=Math.sinh(Math.atanh(s)-e*Math.atanh(e*s));
+const xi=Math.atan2(t,Math.cos(l)),et=Math.atanh(Math.sin(l)/Math.sqrt(1+t*t));let X=xi,Y=et;
+K.al.forEach((a,j)=>{const m=2*(j+1);X+=a*Math.sin(m*xi)*Math.cosh(m*et);Y+=a*Math.cos(m*xi)*Math.sinh(m*et)});
+return[500000+.9996*K.A*Y,.9996*K.A*X]}
+function u2g(el,E,N,fu){const e=el.e,K=kr(el);let xi=N/(.9996*K.A),et=(E-500000)/(.9996*K.A),x1=xi,e1=et;
+K.be.forEach((b,j)=>{const m=2*(j+1);x1-=b*Math.sin(m*xi)*Math.cosh(m*et);e1-=b*Math.cos(m*xi)*Math.sinh(m*et)});
+const ta=Math.tan(Math.asin(Math.sin(x1)/Math.cosh(e1)));let t=ta;
+for(let i=0;i<8;i++){const sg=Math.sinh(e*Math.atanh(e*t/Math.sqrt(1+t*t))),ti=t*Math.sqrt(1+sg*sg)-sg*Math.sqrt(1+t*t);t+=(ta-ti)/Math.sqrt(1+ti*ti)*(1+(1-e*e)*t*t)/((1-e*e)*Math.sqrt(1+t*t))}
+return[Math.atan(t)/D,(fu-31)*6+3+Math.atan2(Math.sinh(e1),Math.cos(x1))/D]}
+function lam(el,z){const e=el.e,P=LZ[z],p0=P.p*D,n=Math.sin(p0),m=p=>Math.cos(p)/Math.sqrt(1-e*e*Math.sin(p)**2),
+t=p=>{const s=e*Math.sin(p);return Math.tan(Math.PI/4-p/2)/Math.pow((1-s)/(1+s),e/2)},F=m(p0)/(n*Math.pow(t(p0),n)),R=p=>el.a*P.k*F*Math.pow(t(p),n),r0=R(p0);
+return{f:(lat,lon)=>{const r=R(lat*D),th=n*(lon-L0)*D;return[FE+r*Math.sin(th),FN+r0-r*Math.cos(th)]},
+i:(X,Y)=>{const dx=X-FE,dy=r0-(Y-FN),r=Math.hypot(dx,dy),th=Math.atan2(dx,dy),tt=Math.pow(r/(el.a*P.k*F),1/n);let p=Math.PI/2-2*Math.atan(tt);
+for(let i=0;i<10;i++){const s=e*Math.sin(p);p=Math.PI/2-2*Math.atan(tt*Math.pow((1-s)/(1+s),e/2))}return[p/D,th/n/D+L0]}}}
+/*UI*/
+
+const T=["UTM  ----------->  LAMBERT","UTM  ----------->  GEO","GEO  ----------->  UTM","GEO  ----------->  LAMBERT","LAMBERT  ->  UTM","LAMBERT  ->  GEO"];
+const I={
+fr:{src:"Coordonnées à convertir",dst:"Coordonnées Converties",el:"El.",go:"Convertir",conv:"Conversion",uz:"Fuseau UTM",lz:"Zone Lambert",lat:"Latitude",lon:"Longitude",E:"Est",W:"Ouest",N:"Nord",S:"Sud",thou:"Milliers",prec:"Précision",mini:"WinCoCo — restaurer",rst:"Relancer WinCoCo",err:"Erreur ",bad:"Valeur incorrecte",ok:"OK",yes:"Oui",no:"Non",sepq:"Le mémo contient des données.\nL'effacer avant de modifier\nle séparateur ?",about:"PROGRAMME DE CONVERSION DE COORDONNEES\n\nCopyRights Adjou M. 2004\nTous droits reservés\n-<O>-\nadjou5@hotmail.com",
+ tcp:"Copier résultats dans presse papier",memo:"Mémo",quit:"Quitter",move:"Déplacer",about_:"A propos",min:"Réduire",sep:"Séparateur, cliquez pour modifier",x_xl:"Exporter vers Excel (.csv)",x_wd:"Exporter vers Word (.doc)",x_tx:"Enregistrer dans fichier texte",x_cp:"Copier dans presse papiers",x_er:"Effacer",x_cl:"Fermer mémo"},
+ar:{src:"الإحداثيات المراد تحويلها",dst:"الإحداثيات المحوَّلة",el:"إه.",go:"تحويل",conv:"التحويل",uz:"نطاق UTM",lz:"منطقة لامبرت",lat:"خط العرض",lon:"خط الطول",E:"شرق",W:"غرب",N:"شمال",S:"جنوب",thou:"آلاف",prec:"الدقة",mini:"WinCoCo — استعادة",rst:"إعادة تشغيل WinCoCo",err:"خطأ في ",bad:"قيمة غير صحيحة",ok:"موافق",yes:"نعم",no:"لا",sepq:"المذكرة تحتوي على بيانات.\nهل تريد مسحها قبل تغيير الفاصل؟",about:"برنامج تحويل الإحداثيات\n\nحقوق النشر Adjou M. 2004\nجميع الحقوق محفوظة\n-<O>-\nadjou5@hotmail.com",
+ tcp:"نسخ النتائج إلى الحافظة",memo:"المذكرة",quit:"خروج",move:"تحريك",about_:"حول البرنامج",min:"تصغير",sep:"الفاصل، انقر لتغييره",x_xl:"تصدير إلى Excel (.csv)",x_wd:"تصدير إلى Word (.doc)",x_tx:"حفظ في ملف نصي",x_cp:"نسخ إلى الحافظة",x_er:"مسح",x_cl:"إغلاق المذكرة"},
+en:{src:"Coordinates to convert",dst:"Converted coordinates",el:"El.",go:"Convert",conv:"Conversion",uz:"UTM zone",lz:"Lambert zone",lat:"Latitude",lon:"Longitude",E:"East",W:"West",N:"North",S:"South",thou:"Thousands",prec:"Precision",mini:"WinCoCo — restore",rst:"Restart WinCoCo",err:"Error in ",bad:"Invalid value",ok:"OK",yes:"Yes",no:"No",sepq:"The memo contains data.\nClear it before changing\nthe separator?",about:"COORDINATE CONVERSION PROGRAM\n\nCopyRights Adjou M. 2004\nAll rights reserved\n-<O>-\nadjou5@hotmail.com",
+ tcp:"Copy results to clipboard",memo:"Memo",quit:"Quit",move:"Move",about_:"About",min:"Minimize",sep:"Separator, tap to change",x_xl:"Export to Excel (.csv)",x_wd:"Export to Word (.doc)",x_tx:"Save to text file",x_cp:"Copy to clipboard",x_er:"Clear",x_cl:"Close memo"}};
+let LG="fr";try{LG=localStorage.getItem("wl")||(/^ar/.test(navigator.language)?"ar":/^en/.test(navigator.language)?"en":"fr")}catch(e){}
+const t=k=>I[LG][k];
+function lang(){document.documentElement.lang=LG;$("hint").textContent=LG.toUpperCase();
+const m={s1:"src",s2:"dst",s3:"el",tGo:"go",gC:"conv",gU:"uz",gL:"lz",pL1:"lat",pL2:"lon",cE:"E",cO:"W",cM:"thou",tP:"prec",mini:"mini",bRe:"rst"};
+for(const k in m)$(k).textContent=(k[0]=="g"?"  ":"")+t(m[k])+(k[0]=="g"?"  ":"");
+const tt={bCp:"tcp",bMemo:"memo",bQ:"quit",bMv:"move",bAb:"about_",bMin:"min",bSep:"sep"};for(const k in tt)$(k).title=t(tt[k]);
+document.querySelectorAll("#pm [data-x]").forEach(b=>b.title=t("x_"+b.dataset.x));
+rg("rgl",[t("N"),t("S")],"l");upd()}
+$("hint").onclick=()=>{LG=LG=="fr"?"ar":LG=="ar"?"en":"fr";try{localStorage.setItem("wl",LG)}catch(e){}lang()};
+const S={c:0,u:2,l:0,w:true,m:true,sep:";"},SEPS=[[";",";"],[",",","],["Tab","\t"],["␣"," "],["|","|"]];let si=0;
+function rg(id,items,key,cols){const d=$(id).lastElementChild;d.innerHTML="";items.forEach((t,i)=>{const r=document.createElement("div");r.className="r";r.textContent=t;r.onclick=()=>{S[key]=i;upd()};d.appendChild(r)})}
+rg("rgc",T,"c");rg("rgu",["29","30","31","32"],"u");
+EL.forEach((e,i)=>{const o=document.createElement("option");o.value=i;o.textContent=e[0];$("rge").appendChild(o)});
+const inG=()=>S.c==2||S.c==3,outG=()=>S.c==1||S.c==5,useU=()=>[0,1,2,4].includes(S.c),useL=()=>[0,3,4,5].includes(S.c);
+function mark(id,idx,en){[...$(id).lastElementChild.children].forEach((r,i)=>{r.classList.toggle("s",i==idx);r.classList.toggle("d",!en)})}
+function upd(){mark("rgc",S.c,1);mark("rgu",S.u,useU());mark("rgl",S.l,useL());$("pg").style.display=inG()?"block":"none";
+for(const i of["ex","ey","lx","ly"])$(i).style.display=inG()?"none":"block";
+$("lxx").textContent=outG()?t("lat"):"X";$("lyy").textContent=outG()?t("lon"):"Y";$("e1").value=$("e2").value="";
+$("cE").classList.toggle("s",!S.w);$("cO").classList.toggle("s",S.w);$("cE").classList.toggle("s",S.w);$("cO").classList.toggle("s",!S.w)}
+$("cE").onclick=()=>{S.w=true;upd()};$("cO").onclick=()=>{S.w=false;upd()};
+$("cM").onclick=()=>{S.m=!S.m;$("cM").classList.toggle("s",S.m)};
+$("pu").onclick=()=>{$("pr").value=Math.min(6,+$("pr").value+1)};$("pd").onclick=()=>{$("pr").value=Math.max(2,+$("pr").value-1)};
+$("rge").onchange=upd;$("ex").oninput=$("ey").oninput=()=>{$("e1").value=$("e2").value=""};
+for(const i of["dx","dy","mx","my"])$(i).oninput=function(){this.value=this.value.replace(/\D/g,"")};
+for(const i of["sx","sy"])$(i).oninput=function(){this.value=this.value.replace(/[^\d.]/g,"")};
+function dlg(msg,btns){return new Promise(ok=>{$("dm").textContent=msg;const b=$("db");b.innerHTML="";btns.forEach((t,i)=>{const x=document.createElement("button");x.className="bt";x.textContent=t;x.onclick=()=>{$("ov").style.display="none";ok(i)};b.appendChild(x)});$("ov").style.display="flex"})}
+const nf=(v,p)=>{let s=v.toFixed(p);if(S.m){const q=s.split(".");q[0]=q[0].replace(/\B(?=(\d{3})+(?!\d))/g," ");s=q.join(".")}return s};
+function dms(v,hem){const p=+$("pr").value,sg=v<0;v=Math.abs(v);let d=Math.floor(v),m=Math.floor((v-d)*60),s=((v-d)*60-m)*60;if(+s.toFixed(p)>=60){s=0;m++}if(m>=60){m=0;d++}
+return d+"° "+String(m).padStart(2,"0")+"' "+s.toFixed(p).padStart(3+p,"0")+'" '+hem(sg)}
+function geoIn(){const f=(id,max,nm,sm)=>{const v=$(id).value.trim();if(v===""||isNaN(+v)||+v<0||+v>=max)throwt("err")+t(nm)+" ("+sm+")";return+v};
+const la=f("dx",91,"lat","°")+f("mx",60,"lat","min")/60+f("sx",60,"lat",'"')/3600,
+lo=f("dy",181,"lon","°")+f("my",60,"lon","min")/60+f("sy",60,"lon",'"')/3600;
+if(la>90||lo>180)throw t("err")+t("lat")+" (°)";return[la,S.w?lo:-lo]}
+$("bGo").onclick=async()=>{try{const el=ell($("rge").value),p=+$("pr").value;let la,lo,o1,o2,i1,i2;
+if(inG()){[la,lo]=geoIn();i1=$("dx").value+"°"+$("mx").value+"'"+$("sx").value+'"';i2=$("dy").value+"°"+$("my").value+"'"+$("sy").value+'"'+(S.w?"E":"W")}
+else{const x=parseFloat($("ex").value.replace(",",".").replace(/\s/g,"")),y=parseFloat($("ey").value.replace(",",".").replace(/\s/g,""));if(isNaN(x)||isNaN(y))throw t("bad");i1=x.toFixed(p);i2=y.toFixed(p);
+[la,lo]=S.c<2?u2g(el,x,y,S.u+29):lam(el,S.l).i(x,y)}
+if(inG()){}
+let r;if(S.c==0||S.c==5&&0)r=lam(el,S.l).f(la,lo);
+if(S.c==0)r=lam(el,S.l).f(la,lo);else if(S.c==2)r=g2u(el,la,lo,S.u+29);else if(S.c==3)r=lam(el,S.l).f(la,lo);else if(S.c==4)r=g2u(el,la,lo,S.u+29);
+if(S.c==1||S.c==5){o1=dms(la,s=>s?t("S"):t("N"));o2=dms(lo,s=>s?t("W"):t("E"));$("e1").value=o1;$("e2").value=o2}
+else{o1=nf(r[0],p);o2=nf(r[1],p);$("e1").value=o1;$("e2").value=o2}
+const sp=SEPS[si][1];$("mt").value+=[i1,i2,o1,o2].join(sp)+"\n"}catch(e){await dlg(String(e),[t("ok")])}};
+$("bCp").onclick=()=>cp($("e1").value+"\t"+$("e2").value);
+function cp(t){try{navigator.clipboard.writeText(t)}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}}
+$("bMemo").onclick=()=>{$("pm").style.display=$("pm").style.display=="block"?"none":"block"};
+function dl(n,t,m){if(window.AndroidApp){AndroidApp.save(n,t,m);return}const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click()}
+document.querySelectorAll("#pm [data-x]").forEach(b=>b.onclick=()=>{const k=b.dataset.x,t=$("mt").value,sp=SEPS[si][1];
+if(k=="cl")$("pm").style.display="none";else if(k=="er")$("mt").value="";else if(k=="cp")cp(t);else if(k=="tx")dl("WinCoCo.txt",t,"text/plain");
+else if(k=="xl")dl("WinCoCo.csv","\ufeff"+t.split("\n").map(l=>l.split(sp).join(";")).join("\r\n"),"text/csv");
+else dl("WinCoCo.doc","<html><meta charset=utf-8><table border=1>"+t.split("\n").filter(Boolean).map(l=>"<tr>"+l.split(sp).map(c=>"<td>"+c+"</td>").join("")+"</tr>").join("")+"</table></html>","application/msword")});
+$("bSep").onclick=async()=>{if($("mt").value&&await dlg(t("sepq"),[t("yes"),t("no")])==1)return;if($("mt").value)$("mt").value="";si=(si+1)%SEPS.length;$("bSep").textContent=SEPS[si][0]};
+$("bAb").onclick=()=>dlg(t("about"),[t("ok")]);
+$("bQ").onclick=()=>{$("app").parentNode.style.display="none";$("off").style.display="flex"};$("bRe").onclick=()=>{$("off").style.display="none";$("stage").style.display="flex"};
+$("bMin").onclick=()=>{$("stage").style.display="none";$("mini").style.display="block"};$("mini").onclick=()=>{$("mini").style.display="none";$("stage").style.display="flex"};
+let mv=null,ox=0,oy=0;$("bMv").onpointerdown=e=>{mv=[e.clientX-ox,e.clientY-oy];$("bMv").setPointerCapture(e.pointerId);$("bMv").classList.add("on")};
+$("bMv").onpointermove=e=>{if(mv){ox=e.clientX-mv[0];oy=e.clientY-mv[1];fit()}};$("bMv").onpointerup=()=>{mv=null;$("bMv").classList.remove("on")};
+document.querySelectorAll("[title]").forEach(e=>{e.onpointerenter=()=>{};});
+function fit(){const s=Math.min(innerWidth/432,innerHeight/292,3);$("app").style.transform="translate("+ox+"px,"+oy+"px) scale("+s+")"}
+addEventListener("resize",fit);rge.value=0;lang();fit();
+</script></body></html>
